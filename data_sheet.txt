@@ -36,7 +36,7 @@ Provider Directory
     - phone: (339) 555-7480
     - address: 123 Main St, Raleigh, NC 27601
     - hours: M-W 9am-5pm
-Brennan, Temperance
+- Brennan, Temperance
   - certification: PhD, MD
   - specialty: Orthopedics
   - department:
@@ -55,7 +55,7 @@ Appointments:
     - otherwise the appointment type is NEW
   Arrival:
     - New patients should arrive 30 minutes early
-    - Establish patients are encouraged to arrive 10 minutes before appointment
+    - Established patients are encouraged to arrive 10 minutes before appointment
 
 Accepted Insurances:
 - Medicaid
