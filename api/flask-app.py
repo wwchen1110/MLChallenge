@@ -29,6 +29,8 @@ def get_data(patient_id):
             ]
         }
         return jsonify(data)
+    else:
+        return jsonify({"error": "Patient not found"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

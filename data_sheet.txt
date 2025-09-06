@@ -48,10 +48,9 @@ Provider Directory
 Appointments:
   Times:
     - appointments can only be booked within office hours
-    - 
   Types:
     - NEW appointment is 30 minutes long, ESTABLISHED appointment is 15 minutes long
-    - An appointment is ESTABLISHED if the patient has been seen the provider in the least 5 years
+    - An appointment is ESTABLISHED if the patient has been seen by the provider in the least 5 years
     - otherwise the appointment type is NEW
   Arrival:
     - New patients should arrive 30 minutes early
