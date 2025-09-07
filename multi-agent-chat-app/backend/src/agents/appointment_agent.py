@@ -3,6 +3,8 @@ import os
 import requests
 import json
 from dotenv import load_dotenv
+from typing import List, Any
+from openai.types.chat import ChatCompletionMessageParam, ChatCompletionToolUnionParam
 
 # Load environment variables from .env file
 load_dotenv()
@@ -16,8 +18,7 @@ with open(DATA_SHEET_PATH, "r", encoding="utf-8") as f:
     DATA_SHEET_PROMPT = f.read()
 
 PATIENT_API_URL = "http://localhost:5000/patient"
-
-def get_patient_info(patient_id: str) -> dict:
+def get_patient_info(patient_id: str) -> dict[str, Any] | None:
     """Fetch patient info from the Flask API."""
     try:
         resp = requests.get(f"{PATIENT_API_URL}/{patient_id}")
@@ -26,6 +27,7 @@ def get_patient_info(patient_id: str) -> dict:
         else:
             return None
     except Exception:
+        return None
         return None
 
 # Define the tool for the Agents API
@@ -37,7 +39,7 @@ def patient_info_tool(patient_id: str) -> str:
     return str(info)
 
 # Tool spec for OpenAI Agents API
-tools = [
+tools: List[ChatCompletionToolUnionParam] = [
     {
         "type": "function",
         "function": {
@@ -69,13 +71,14 @@ class AppointmentAgent:
             "DATA SHEET:\n"
             f"{DATA_SHEET_PROMPT}"
         )
+        self.messages: List[ChatCompletionMessageParam]
 
     def start_chat(self):
         self.messages = [
             {"role": "system", "content": self.system_prompt}
         ]
 
-    def ask(self, user_input):
+    def ask(self, user_input: str) -> str | None:
         self.messages.append({"role": "user", "content": user_input})
 
         # Call the OpenAI Agents API (function calling)

@@ -1,6 +1,7 @@
+from typing import Optional, Any
 class ThreadManager:
     def __init__(self):
-        self.threads = {}
+        self.threads: dict[int, dict[str, Any]] = {}
         self.thread_counter = 0
 
     def create_thread(self, name: str) -> int:
@@ -26,7 +27,7 @@ class ThreadManager:
             return True
         return False
 
-    def get_thread(self, thread_id: int) -> dict:
+    def get_thread(self, thread_id: int) -> Optional[dict[str, Any]]:
         """Retrieve a thread's information by its ID."""
         return self.threads.get(thread_id, None)
 
@@ -37,13 +38,13 @@ class ThreadManager:
             return True
         return False
 
-    def get_thread_history(self, thread_id: int) -> list:
+    def get_thread_history(self, thread_id: int) -> list[Any]:
         """Retrieve the conversation history for a specific thread."""
         if thread_id in self.threads:
             return self.threads[thread_id]["history"]
         return []
 
-    def get_all_threads(self):
+    def get_all_threads(self) -> list[dict[str, Any]]:
         """Return a list of all threads with their IDs and names."""
         return [
             {"id": thread_id, "name": thread["name"]}
