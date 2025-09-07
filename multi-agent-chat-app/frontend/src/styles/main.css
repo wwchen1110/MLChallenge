@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.thread-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.thread-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.thread-item:hover {
+    background-color: #34495e;
+}
+
+.conversation {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    max-width: 70%;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.message.user {
+    text-align: right;
+    background-color: #d1e7dd;
+    align-self: flex-end;
+}
+
+.message.agent {
+    text-align: left;
+    background-color: #f8d7da;
+    align-self: flex-start;
+}
+
+.message-content {
+    white-space: pre-wrap;
+}
+
+.button {
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #3498db;
+}

@@ -11,7 +11,8 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Load the data sheet as the system prompt
-with open("data_sheet.txt", "r", encoding="utf-8") as f:
+DATA_SHEET_PATH = os.path.join(os.path.dirname(__file__), "data_sheet.txt")
+with open(DATA_SHEET_PATH, "r", encoding="utf-8") as f:
     DATA_SHEET_PROMPT = f.read()
 
 PATIENT_API_URL = "http://localhost:5000/patient"
@@ -63,6 +64,7 @@ class AppointmentAgent:
             "Answer user questions using the data sheet where possible. "
             "If a user asks for patient-specific information, ensure you have a patient ID. If not, ask for it."
             "Once you have a patient ID, use the get_patient_info tool to retrieve their information."
+            "Format information in a readable manner, using newlines and tabs."
             "If the information is missing, say so. \n\n"
             "DATA SHEET:\n"
             f"{DATA_SHEET_PROMPT}"
@@ -85,6 +87,7 @@ class AppointmentAgent:
         )
 
         reply = response.choices[0].message
+        print("Reply: ", reply.content, flush=True)
 
         # If the model wants to call a tool, handle it
         if reply.tool_calls:
@@ -110,7 +113,6 @@ class AppointmentAgent:
                         "name": "get_patient_info",
                         "content": patient_info
                     })
-                    print("Message history: ", self.messages)
                     response2 = openai.chat.completions.create(
                         model="gpt-4o",
                         messages=self.messages,
@@ -118,6 +120,7 @@ class AppointmentAgent:
                         tool_choice="auto"
                     )
                     final_reply = response2.choices[0].message.content
+                    print("Reply: ", final_reply, flush=True)
                     self.messages.append({"role": "assistant", "content": final_reply})
                     return final_reply
 
