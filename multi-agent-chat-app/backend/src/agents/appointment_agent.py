@@ -28,7 +28,6 @@ def get_patient_info(patient_id: str) -> dict[str, Any] | None:
             return None
     except Exception:
         return None
-        return None
 
 # Define the tool for the Agents API
 def patient_info_tool(patient_id: str) -> str:
@@ -71,7 +70,7 @@ class AppointmentAgent:
             "DATA SHEET:\n"
             f"{DATA_SHEET_PROMPT}"
         )
-        self.messages: List[ChatCompletionMessageParam]
+        self.messages: List[dict[str, Any]] = []
 
     def start_chat(self):
         self.messages = [
@@ -84,7 +83,7 @@ class AppointmentAgent:
         # Call the OpenAI Agents API (function calling)
         response = openai.chat.completions.create(
             model="gpt-4o",
-            messages=self.messages,
+            messages=self.messages, # type: ignore
             tools=tools,
             tool_choice="auto"
         )
@@ -101,9 +100,9 @@ class AppointmentAgent:
                 "tool_calls": reply.tool_calls
             })
             for tool_call in reply.tool_calls:
-                if tool_call.function.name == "get_patient_info":
+                if tool_call.function.name == "get_patient_info": # type: ignore
                     # Parse the arguments string to a dictionary
-                    args = json.loads(tool_call.function.arguments)
+                    args = json.loads(tool_call.function.arguments) # type: ignore
                     patient_id = args.get("patient_id")
                     if not patient_id:
                         followup = "Please provide the patient ID to retrieve their information."
@@ -118,7 +117,7 @@ class AppointmentAgent:
                     })
                     response2 = openai.chat.completions.create(
                         model="gpt-4o",
-                        messages=self.messages,
+                        messages=self.messages, # type: ignore
                         tools=tools,
                         tool_choice="auto"
                     )

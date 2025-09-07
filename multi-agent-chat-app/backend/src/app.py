@@ -69,6 +69,10 @@ def ask_agent(thread_id: str) -> Response:
         return response
     user_input = data.get('input')
     reply = agents[thread_id_int].ask(user_input)
+    if reply is None:
+        response = jsonify({"error": "Agent failed to respond."})
+        response.status_code = 500
+        return response
     # Store messages as objects for frontend compatibility
     from datetime import datetime
     timestamp = datetime.now().strftime("%H:%M")
@@ -83,7 +87,7 @@ def ask_agent(thread_id: str) -> Response:
         "timestamp": timestamp
     })
     response = jsonify({"reply": reply})
-    response.status = 200
+    response.status_code = 200
     return response
 
 if __name__ == '__main__':

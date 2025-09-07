@@ -1,7 +1,6 @@
 import React from 'react';
 
 interface MessageProps {
-    key: number;
     sender: 'user' | 'agent';
     content: string;
     timestamp: string;

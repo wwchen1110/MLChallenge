@@ -31,7 +31,7 @@ class ThreadManager:
         """Retrieve a thread's information by its ID."""
         return self.threads.get(thread_id, None)
 
-    def add_message_to_thread(self, thread_id: int, message: str) -> bool:
+    def add_message_to_thread(self, thread_id: int, message: dict[str, str]) -> bool:
         """Add a message to the conversation history of a thread."""
         if thread_id in self.threads:
             self.threads[thread_id]["history"].append(message)

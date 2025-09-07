@@ -139,7 +139,7 @@ const ChatPage: React.FC = () => {
     };
 
     return (
-        <div className="chat-page" style={{ display: 'flex', height: '100vh' }}>
+        <div className="chat-page">
             <Sidebar
                 threads={threads}
                 onSelectThread={handleThreadSelect}
@@ -152,11 +152,11 @@ const ChatPage: React.FC = () => {
                     messages={messages[selectedThread] || []}
                 />
                 {errorMsg && (
-                    <div style={{ color: 'red', padding: '0.5rem' }}>
+                    <div className="error-message">
                         {errorMsg}
                     </div>
                 )}
-                <div style={{ display: 'flex', padding: '1rem', borderTop: '1px solid #eee', marginTop: 'auto' }}>
+                <div className="input-area">
                     <input
                         type="text"
                         value={prompt}
@@ -167,7 +167,6 @@ const ChatPage: React.FC = () => {
                             }
                         }}
                         placeholder="Type your prompt..."
-                        style={{ flex: 1, marginRight: '1rem', padding: '0.5rem' }}
                         disabled={loading}
                     />
                     <button onClick={handlePromptSubmit} disabled={loading || !prompt.trim()}>
