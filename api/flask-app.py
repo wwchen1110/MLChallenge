@@ -19,7 +19,7 @@ def get_data(patient_id):
             "ehrId": "1234abcd",
             "referred_providers": [
                 {"provider": "House, Gregory MD", "specialty": "Orthopedics"},
-                {"specialty": "Primary Care"},
+                {"provider": "Grey, Meredith MD", "specialty": "Primary Care"}
             ],
             "appointments": [
                 {"date": "3/05/18", "time": "9:15am", "provider": "Dr. Meredith Grey", "status": "completed"},

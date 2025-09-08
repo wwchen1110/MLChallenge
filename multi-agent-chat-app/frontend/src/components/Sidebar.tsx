@@ -1,49 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Thread {
     id: string;
-    name: string;
+    patient_id: string;
+    created: string;
 }
 
 interface SidebarProps {
     threads: Thread[];
     onSelectThread: (id: string) => void;
-    onCreateThread: (name: string) => void;
-    onRenameThread: (id: string, newName: string) => void;
+    onCreateThread: (patientId: string) => void;
     onDeleteThread: (id: string) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ threads, onSelectThread, onCreateThread, onRenameThread, onDeleteThread }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+    threads,
+    onSelectThread,
+    onCreateThread,
+    onDeleteThread
+}) => {
+    const [newPatientId, setNewPatientId] = useState('');
+
     const handleCreateThread = () => {
-        const threadName = prompt("Enter thread name:");
-        if (threadName) {
-            onCreateThread(threadName);
-        }
-    };
-
-    const handleRenameThread = (threadId: string) => {
-        const newName = prompt("Enter new thread name:");
-        if (newName) {
-            onRenameThread(threadId, newName);
-        }
-    };
-
-    const handleDeleteThread = (threadId: string) => {
-        if (window.confirm("Are you sure you want to delete this thread?")) {
-            onDeleteThread(threadId);
+        if (newPatientId.trim()) {
+            onCreateThread(newPatientId);
+            setNewPatientId('');
+        } else {
+            alert("Please enter a patient ID.");
         }
     };
 
     return (
         <div className="sidebar">
             <h2>Threads</h2>
+            <input
+                type="text"
+                placeholder="Patient ID"
+                value={newPatientId}
+                onChange={e => setNewPatientId(e.target.value)}
+                style={{ marginBottom: '8px', width: '100%', padding: '8px' }}
+            />
             <button onClick={handleCreateThread}>Create Thread</button>
             <ul>
                 {threads.map(thread => (
                     <li key={thread.id}>
-                        <span onClick={() => onSelectThread(thread.id)}>{thread.name}</span>
-                        <button onClick={() => handleRenameThread(thread.id)}>Rename</button>
-                        <button onClick={() => handleDeleteThread(thread.id)}>Delete</button>
+                        <span onClick={() => onSelectThread(thread.id)}>
+                            {thread.created} — Patient ID: {thread.patient_id}
+                        </span>
+                        <button onClick={() => onDeleteThread(thread.id)}>Delete</button>
                     </li>
                 ))}
             </ul>

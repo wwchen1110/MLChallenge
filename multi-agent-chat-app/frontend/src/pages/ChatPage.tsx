@@ -6,7 +6,7 @@ const BACKEND_URL = 'http://localhost:5001';
 
 const ChatPage: React.FC = () => {
     const [selectedThread, setSelectedThread] = useState<string>('');
-    const [threads, setThreads] = useState<{ id: string; name: string }[]>([]);
+    const [threads, setThreads] = useState<{ id: string; patient_id: string; created: string }[]>([]);
     const [messages, setMessages] = useState<{ [key: string]: any[] }>({});
     const [prompt, setPrompt] = useState('');
     const [loading, setLoading] = useState(false);
@@ -29,17 +29,22 @@ const ChatPage: React.FC = () => {
         setSelectedThread(threadId);
     };
 
-    const handleCreateThread = async (name: string) => {
+    const handleCreateThread = async (patientId: string) => {
         const res = await fetch(`${BACKEND_URL}/threads`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name })
+            body: JSON.stringify({ patient_id: patientId })
         });
         const data = await res.json();
         if (res.ok && data.thread_id) {
-            setThreads([...threads, { id: data.thread_id.toString(), name }]);
-            setMessages({ ...messages, [data.thread_id]: [] });
-            setSelectedThread(data.thread_id.toString());
+            // Fetch updated thread list from backend to get created date
+            fetch(`${BACKEND_URL}/threads`)
+                .then(res => res.json())
+                .then(data => {
+                    setThreads(data);
+                    setSelectedThread(data[data.length - 1].id.toString());
+                });
+            setMessages(prev => ({ ...prev, [data.thread_id]: [] }));
         } else {
             setErrorMsg(data.error || 'Failed to create thread.');
         }
@@ -144,7 +149,6 @@ const ChatPage: React.FC = () => {
                 threads={threads}
                 onSelectThread={handleThreadSelect}
                 onCreateThread={handleCreateThread}
-                onRenameThread={handleRenameThread}
                 onDeleteThread={handleDeleteThread}
             />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 interface MessageProps {
     sender: 'user' | 'agent';
@@ -10,7 +11,11 @@ const Message: React.FC<MessageProps> = ({ sender, content, timestamp }) => {
     return (
         <div className={`message ${sender}`}>
             <div className="message-content" style={{ whiteSpace: 'pre-wrap' }}>
-                {content}
+                {sender === 'agent' ? (
+                    <ReactMarkdown>{content}</ReactMarkdown>
+                ) : (
+                    content
+                )}
             </div>
             <div className="message-timestamp">{timestamp}</div>
         </div>
