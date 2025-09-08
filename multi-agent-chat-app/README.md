@@ -81,7 +81,3 @@ Once both the backend and frontend are running, users can interact with the agen
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any enhancements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License.
