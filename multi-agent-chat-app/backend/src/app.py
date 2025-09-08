@@ -73,10 +73,6 @@ def ask_agent(thread_id: str) -> Response:
         response = jsonify({"error": "Invalid thread ID."})
         response.status_code = 400
         return response
-    if thread_id_int not in agents:
-        response = jsonify({"error": "Thread not found."})
-        response.status_code = 404
-        return response
     data = request.json
     if not data or 'input' not in data:
         response = jsonify({"error": "Input is required."})
