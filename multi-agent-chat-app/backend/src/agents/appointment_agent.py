@@ -61,12 +61,11 @@ class AppointmentAgent:
         )
 
         reply = response.choices[0].message
-        print("Reply: ", reply.content, flush=True)
 
         self.messages.append({"role": "assistant", "content": reply.content})
         return reply.content
 
-# Example usage (for integration with CLI)
+# Example usage
 if __name__ == "__main__":
     agent = AppointmentAgent({"name": "Bob Builder"})
     agent.start_chat()
