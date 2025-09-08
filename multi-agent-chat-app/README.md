@@ -50,7 +50,26 @@ The backend is built using Flask and handles the logic for managing agents and t
    ```
    pip install -r requirements.txt
    ```
-3. Run the application:
+3. Ensure the patient data API is running on port 5000. This API should provide patient information at the endpoint `/patient/<patient_id>` in the following format:
+   ```json
+   {
+     "id": 1,
+     "name": "John Doe",
+     "dob": "01/01/1975",
+     "pcp": "Dr. Meredith Grey",
+     "ehrId": "1234abcd",
+     "referred_providers": [
+       {"provider": "House, Gregory MD", "specialty": "Orthopedics"},
+       ...
+     ],
+     "appointments": [
+       {"date": "3/05/18", "time": "9:15am", "provider": "Dr. Meredith Grey", "status": "completed"},
+       ...
+     ]
+   }
+   ```
+   The backend will use this patient data to create agents when a new conversation thread is started.
+4. Run the application:
    ```
    python src/app.py
    ```
