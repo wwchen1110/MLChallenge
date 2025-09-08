@@ -30,16 +30,16 @@ The backend consists of the following main components:
    ```bash
    python src/app.py
    ```
-   The server will run on `http://localhost:5000`.
+   The server will run on `http://localhost:5001`.
 
 ## API Usage
 
-The backend exposes several API endpoints for managing agents and threads. Below are some key endpoints:
+The backend exposes several API endpoints for managing agents and threads:
 
-- **GET /patient/{patient_id}**: Retrieve information about a specific patient using their ID.
-- **POST /threads**: Create a new conversation thread.
+- **POST /threads**: Create a new conversation thread by providing a patient ID. The backend fetches patient info from an external API and stores it in the agent for that thread.
 - **DELETE /threads/{thread_id}**: Delete an existing conversation thread.
-- **GET /threads**: Retrieve a list of all conversation threads.
+- **GET /threads**: Retrieve a list of all conversation threads (with thread ID, patient ID, and creation date).
+- **POST /threads/{thread_id}/ask**: Send a message to the agent associated with a thread and receive a response.
 
 ## Contributing
 

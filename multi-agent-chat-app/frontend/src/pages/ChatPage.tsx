@@ -50,10 +50,6 @@ const ChatPage: React.FC = () => {
         }
     };
 
-    const handleRenameThread = (id: string, newName: string) => {
-        setThreads(threads.map(thread => thread.id === id ? { ...thread, name: newName } : thread));
-    };
-
     const handleDeleteThread = async (id: string) => {
         const res = await fetch(`${BACKEND_URL}/threads/${id}`, { method: 'DELETE' });
         if (res.ok) {
