@@ -28,48 +28,6 @@ def get_patient_info(patient_id: str) -> dict[str, Any] | None:
     except Exception:
         return None
 
-# Define the tool for calling external API
-# def patient_info_tool(patient_id: str) -> str:
-#     """Tool for the agent to fetch patient info."""
-#     info = get_patient_info(patient_id)
-#     if info is None:
-#         return f"Could not find information for patient ID {patient_id}."
-#     return str(info)
-
-# # Define the tool for returning local DB info
-# def patient_info_local_tool(patient_id: str, columns: list[str]) -> dict[str, Any]:
-#     """Tool for the agent to fetch patient info from local DB."""
-#     info = get_patient(patient_id)
-#     if not info:
-#         return {"error": f"Could not find information for patient ID {patient_id}."}
-#     return {col: info.get(col) for col in columns}
-
-# # Tool spec for OpenAI Agents API
-# tools: List[ChatCompletionToolUnionParam] = [
-#     {
-#         "type": "function",
-#         "function": {
-#             "name": "get_patient_data",
-#             "description": "Get specific patient data fields from the local database.",
-#             "parameters": {
-#                 "type": "object",
-#                 "properties": {
-#                     "patient_id": {
-#                         "type": "string",
-#                         "description": "The unique patient ID, e.g., '1'."
-#                     },
-#                     "columns": {
-#                         "type": "array",
-#                         "items": {"type": "string"},
-#                         "description": "List of patient data fields to retrieve."
-#                     }
-#                 },
-#                 "required": ["patient_id", "columns"]
-#             }
-#         }
-#     }
-# ]
-
 class AppointmentAgent:
     def __init__(self, patient_info: dict[str, Any]):
         patient_info_str = ""
@@ -100,42 +58,10 @@ class AppointmentAgent:
         response = openai.chat.completions.create(
             model="gpt-4o",
             messages=self.messages, # type: ignore
-            # tools=tools,
-            # tool_choice="auto"
         )
 
         reply = response.choices[0].message
         print("Reply: ", reply.content, flush=True)
-
-        # If the model wants to call a tool, handle it
-        # if reply.tool_calls:
-        #     self.messages.append({
-        #         "role": "assistant",
-        #         "content": reply.content,
-        #         "tool_calls": reply.tool_calls
-        #     })
-        #     for tool_call in reply.tool_calls:
-        #         if tool_call.function.name == "get_patient_data": # type: ignore
-        #             args = json.loads(tool_call.function.arguments) # type: ignore
-        #             pid = args.get("patient_id", patient_id)
-        #             columns = args.get("columns", [])
-        #             patient_data = patient_info_local_tool(pid, columns)
-        #             self.messages.append({
-        #                 "role": "tool",
-        #                 "tool_call_id": tool_call.id,
-        #                 "name": "get_patient_data",
-        #                 "content": json.dumps(patient_data)
-        #             })
-        #             response2 = openai.chat.completions.create(
-        #                 model="gpt-4o",
-        #                 messages=self.messages, # type: ignore
-        #                 tools=tools,
-        #                 tool_choice="auto"
-        #             )
-        #             final_reply = response2.choices[0].message.content
-        #             print("Reply: ", final_reply, flush=True)
-        #             self.messages.append({"role": "assistant", "content": final_reply})
-        #             return final_reply
 
         self.messages.append({"role": "assistant", "content": reply.content})
         return reply.content
