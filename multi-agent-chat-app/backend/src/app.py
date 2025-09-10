@@ -90,18 +90,6 @@ def ask_agent(thread_id: str) -> Response:
         response.status_code = 500
         return response
     # Store messages as objects for frontend compatibility
-    from datetime import datetime
-    timestamp = datetime.now().strftime("%H:%M")
-    thread_manager.add_message_to_thread(thread_id_int, {
-        "content": user_input,
-        "sender": "user",
-        "timestamp": timestamp
-    })
-    thread_manager.add_message_to_thread(thread_id_int, {
-        "content": reply,
-        "sender": "agent",
-        "timestamp": timestamp
-    })
     response = jsonify({"reply": reply})
     response.status_code = 200
     return response

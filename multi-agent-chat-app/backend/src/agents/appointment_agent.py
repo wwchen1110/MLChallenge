@@ -1,4 +1,5 @@
 import openai
+import time
 import os
 import requests
 import json
@@ -52,18 +53,27 @@ class AppointmentAgent:
         ]
 
     def ask(self, user_input: str) -> str | None:
+
         self.messages.append({"role": "user", "content": user_input})
 
-        # Call the OpenAI Agents API (function calling)
-        response = openai.chat.completions.create(
-            model="gpt-4o",
-            messages=self.messages, # type: ignore
-        )
-
-        reply = response.choices[0].message
-
-        self.messages.append({"role": "assistant", "content": reply.content})
-        return reply.content
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                response = openai.chat.completions.create(
+                    model="gpt-4o",
+                    messages=self.messages, # type: ignore
+                    timeout=20  # seconds
+                )
+                reply = response.choices[0].message
+                print("Reply: ", reply.content, flush=True)
+                self.messages.append({"role": "assistant", "content": reply.content})
+                return reply.content
+            except Exception as e:
+                print(f"OpenAI API error (attempt {attempt+1}): {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(2)  # wait before retrying
+                else:
+                    return None
 
 # Example usage
 if __name__ == "__main__":
